@@ -1,0 +1,58 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-address_table
+      author: Nataliya
+      changes:
+        - createTable:
+            tableName: address
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: country
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: region
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: city
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: street
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: house_number
+                  type: varchar(5)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: entrance_number
+                  type: int
+                  constraints:
+                    nullable: true
+              - column:
+                  name: apartment_number
+                  type: int
+                  constraints:
+                    nullable: true
+              - column:
+                  name: postcode
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: oktmo
+                  type: varchar(11)
+                  constraints:
+                    nullable: false

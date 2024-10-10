@@ -1,0 +1,50 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-user_profile-table
+      author: Nataliya
+      changes:
+        - createTable:
+            tableName: user_profile
+            columns:
+              - column:
+                  name: customer_id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: password
+                  type: varchar(255)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: profile_reg_datetime
+                  type: timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: last_verification_code
+                  type: char(6)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_code_expiration
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: next_attempt_time
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: wrong_attempts
+                  type: smallint
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sms_sent_counter
+                  type: smallint
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false

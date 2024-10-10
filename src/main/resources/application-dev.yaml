@@ -1,0 +1,101 @@
+server:
+  servlet:
+    context-path: /customer/api/v1
+  port: 8080
+
+spring:
+  application:
+    name: customer-service
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${DB_URL:jdbc:postgresql://localhost:5462/customer-service}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:postgres}
+    hikari:
+      maximum-pool-size: 10
+  liquibase:
+    enabled: true
+    change-log: db/changelog/db.changelog-master.yaml
+    contexts: dev
+
+  kafka:
+    bootstrap-servers: ${URL_KAFKA_BROKER:localhost:9092}
+
+    consumer:
+      topics:
+        abs-add-new-client-topic: abs_add-new-client
+        abs-update-client-info-topic: abs_update-client-info
+      group-id: customer
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      types:
+        new-customer: spring.json.value.default.type=ru.zinoviev.customerservice.dto.kafka.KafkaCustomerDto
+        update-customer: spring.json.value.default.type=ru.zinoviev.customerservice.dto.kafka.KafkaUpdateCustomerDto
+      properties:
+        spring:
+          json:
+            value:
+              trusted:
+                packages: "*"
+        max.poll.interval.ms: 30000
+
+    producer:
+      topics:
+        topic-name: customer_service
+        partitions: 3
+        replicas: 1
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+
+
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+
+grpc:
+  server:
+    port: ${GRPC_PORT:9094}
+
+logstash:
+  server:
+    port: ${LOGSTASH_PORT:localhost:5000}
+
+#springdoc:
+#  api-docs:
+#    path: /customer-service.yaml
+#  swagger-ui:
+#    url: /customer-service.yaml
+#    operations-sorter: alpha
+
+management:
+  info:
+    env:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: 'health, info, metrics, prometheus'
+      base-path: /monitor
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    distribution:
+      percentiles-histogram:
+        "[http.server.requests]": true
+    tags:
+      application: ${spring.application.name}
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://172.17.1.79:30411/api/v2/spans

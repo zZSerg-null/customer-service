@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package customerservice;
+
+import "google/protobuf/timestamp.proto";
+
+service CustomerServiceGrpc {
+    rpc GetCustomerData(CustomerDataRequest) returns (CustomerDataResponse);
+    rpc getCustomerStatus(SendingCustomerStatusRequest) returns (SendingCustomerStatusResponse);
+}
+
+message CustomerDataRequest {
+    string customer_id = 1;
+}
+
+message CustomerDataResponse {
+    string customer_id = 1;
+    string first_name = 2;
+    string last_name = 3;
+    string patronymic = 4;
+    google.protobuf.Timestamp birthdate = 5;
+    string inn = 6;
+    string mobile_phone = 7;
+    string email = 8;
+    bool sms_notification = 9;
+    bool push_notification = 10;
+    bool email_notification = 11;
+    Passport passport = 12;
+    Address address = 13;
+}
+
+message Passport {
+    string citizenship = 1;
+    string series = 2;
+    string number = 3;
+    google.protobuf.Timestamp issuance_date = 4;
+    string issued_by = 5;
+    string department_code = 6;
+}
+
+message Address {
+    string country = 1;
+    string region = 2;
+    string city = 3;
+    string street = 4;
+    string house_number = 5;
+    string entrance_number = 6;
+    string apartment_number = 7;
+    string postcode = 8;
+    string oktmo = 9;
+}
+
+message SendingCustomerStatusRequest {
+    string mobile_phone = 1;
+    string customer_status = 2;
+}
+
+message SendingCustomerStatusResponse {
+    string message = 1;
+}

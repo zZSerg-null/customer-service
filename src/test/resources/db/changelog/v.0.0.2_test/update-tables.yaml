@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: update-tables
+      author: Mikhail
+      changes:
+        - modifyDataType:
+            tableName: address
+            columnName: entrance_number
+            newDataType: varchar(5)
+        - addAutoIncrement:
+            tableName: address
+            columnName: id
+        - addAutoIncrement:
+            tableName: passport
+            columnName: id
+        - sql:
+            sql: SELECT setval('address_id_seq', (SELECT MAX(id) FROM address))
+        - sql:
+            sql: SELECT setval('passport_id_seq', (SELECT MAX(id) FROM passport))

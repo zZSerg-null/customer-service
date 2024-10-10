@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-user_token
+      author: Nataliya
+      changes:
+        - createTable:
+            tableName: user_token
+            columns:
+              - column:
+                  name: token_id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: customer_id
+                  type: UUID
+                  constraints:
+                    foreignKeyName: fk_user_token_customer_id
+                    onDelete: CASCADE
+                    references: user_profile(customer_id)
+              - column:
+                  name: token_value
+                  type: varchar
+                  constraints:
+                    nullable: false

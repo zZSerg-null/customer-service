@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: customer-service
+  profiles:
+    active: dev
+
+#Application global values
+application:
+  security:
+    jwt:
+      secret-key: ${ACCOUNT_SERVICE_JWT_SECRET_KEY}
+      expiration-session: ${ACCOUNT_SERVICE_SESSION_TOKEN_EXPIRATION:600000}  # 10 минут
+      expiration-access: ${ACCOUNT_SERVICE_JWT_EXPIRATION_ACCESS:600000}      # 10 минут
+      expiration-refresh: ${ACCOUNT_SERVICE_JWT_EXPIRATION_REFRESH:1800000}   # 30 минут

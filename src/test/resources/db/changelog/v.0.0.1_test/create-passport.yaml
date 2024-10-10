@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-passport_table
+      author: Nataliya
+      changes:
+        - createTable:
+            tableName: passport
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: citizenship
+                  type: varchar(2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: series
+                  type: varchar(4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: number
+                  type: varchar(6)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: issuance_date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: department_code
+                  type: varchar(7)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: issued_by
+                  type: varchar(100)
+                  constraints:
+                    nullable: false

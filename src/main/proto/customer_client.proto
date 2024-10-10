@@ -1,0 +1,60 @@
+syntax = "proto3";
+import "google/protobuf/timestamp.proto";
+
+option java_multiple_files = true;
+option java_package = "ru.aston.grpc.server";
+
+package server;
+
+message CustomerAvailablePassportRequest {
+  string series = 1;
+  string number = 2;
+}
+
+message CustomerResponse {
+  string customerUuid = 1;
+  string firstName = 2;
+  string lastName = 3;
+  string patronymic = 4;
+  string mobilePhone = 5;
+  string officeRegUuid = 6;
+  google.protobuf.Timestamp accesionDate = 7;
+  string email = 8;
+  google.protobuf.Timestamp birthDate = 9;
+  string inn = 10;
+  string country = 11;
+  string region = 12;
+  string city = 13;
+  string street = 14;
+  string houseNumber = 15;
+  int32 entranceNumber = 16;
+  int32 apartmentNumber = 17;
+  int32 postcode = 18;
+  string oktmo = 19;
+  string codeword = 20;
+  bool smsNotification = 21;
+  bool pushNotification = 22;
+  bool emailSubscription = 23;
+  string clientStatus = 24;
+  string securityQuestion = 25;
+  string securityAnswer = 26;
+  google.protobuf.Timestamp dateOfIssue = 27;
+  string issuedBy = 28;
+  string departamentCode = 29;
+  string citizenship = 30;
+  string series = 31;
+  string number = 32;
+}
+
+message ErrorResponse {
+  string message = 1;
+}
+
+service Server {
+  rpc GetCustomerByPassport (CustomerAvailablePassportRequest) returns (CustomerResponse);
+  rpc getCustomerAvailablePhone(CustomerAvailablePhoneRequest) returns (CustomerResponse);
+}
+
+message CustomerAvailablePhoneRequest {
+  string mobilePhone = 1;
+}

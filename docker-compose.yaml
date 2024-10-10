@@ -1,0 +1,99 @@
+version: '3.2'
+services:
+#  user-service:
+#    image: user-service
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      - postgresql
+#    environment:
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/customer-service
+#      - SPRING_DATASOURCE_USERNAME=postgres
+#      - SPRING_DATASOURCE_PASSWORD=postgres
+#      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+
+  postgresql:
+    image: postgres
+    container_name: cs_postgres
+    ports:
+      - "5462:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=customer-service
+      - PGDATA=/data/postgres
+#    volumes:
+#      - ./src/main/resources/db/postgresql:/docker-entrypoint-initdb.d
+    restart: "no"
+    
+
+#  sonar:
+#    image: sonarqube
+#    container_name: sonar
+#    ports:
+#      - "9000:9000"
+#    environment:
+#      SONAR_ES_BOOTSTRAP_CHECKS_DISABLE: true
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper
+    hostname: zookeeper
+    container_name: cs_zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: confluentinc/cp-kafka
+    hostname: kafka
+    container_name: cs_kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "9997:9997"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:19092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  kafka-ui:
+    container_name: cs_kafka-ui
+    image: provectuslabs/kafka-ui:latest
+    ports:
+      - "8090:8080"
+    environment:
+      DYNAMIC_CONFIG_ENABLED: true
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:19092
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+
+  redis:
+    image: "redis:latest"
+    ports:
+      - "6379:6379"
+
+  prometheus:
+    image: prom/prometheus
+    container_name: cs_prometheus
+    ports:
+      - "9095:9090"
+    volumes:
+      - ./src/main/resources/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    build: ./src/main/resources/grafana
+    container_name: sc_grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin

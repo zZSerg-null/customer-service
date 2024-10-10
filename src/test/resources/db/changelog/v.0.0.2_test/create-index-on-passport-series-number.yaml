@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: resolve-duplicates
+      author: Pavel Sidorov
+      changes:
+        - sqlFile:
+            path: db/changelog/v.0.0.2_test/resolve_passport_duplicates.sql
+            splitStatements: false
+
+  - changeSet:
+      id: add-unique-constraint-passport-series-number
+      author: Pavel Sidorov
+      changes:
+        - sql:
+            sql: ALTER TABLE passport ADD CONSTRAINT passport_series_number_key UNIQUE (series, number);
+
+  - changeSet:
+      id: add-unique-index-passport-series-number
+      author: Pavel Sidorov
+      runInTransaction: false
+      changes:
+        - sql:
+            sql: CREATE UNIQUE INDEX CONCURRENTLY passport_series_number_idx ON passport(series, number);

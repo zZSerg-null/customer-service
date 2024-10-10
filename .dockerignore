@@ -1,0 +1,33 @@
+# Gradle files
+.gradle/
+#build/
+
+# Maven files
+.mvn
+mvnw
+mvnw.cmd
+
+# IDE files
+.idea/
+*.iml
+
+# VScode
+.vscode
+
+# Logs
+logs/
+
+# Test reports & target
+test-results/
+target/
+
+# Miscellaneous
+.DS_Store
+
+# Docker compose
+docker-compose.yaml
+
+# Gitlab
+.gitlab-ci.yml 
+
+README.md

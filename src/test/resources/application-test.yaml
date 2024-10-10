@@ -1,0 +1,64 @@
+server:
+  servlet:
+    context-path: /customer/api/v1
+spring:
+  liquibase:
+    enabled: true
+    change-log: db/changelog/db.changelog-test.yaml
+    contexts: test
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  kafka:
+    consumer:
+      topics:
+        abs-add-new-client-topic: abs_add-new-client
+        abs-update-client-info-topic: abs_update-client-info
+      group-id: customer
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      types:
+        new-customer: spring.json.value.default.type=ru.zinovievbank.customerservice.dto.kafka.KafkaCustomerDto
+        update-customer: spring.json.value.default.type=ru.zinovievbank.customerservice.dto.kafka.KafkaUpdateCustomerDto
+      properties:
+        spring:
+          json:
+            value:
+              trusted:
+                packages: "*"
+        max.poll.interval.ms: 30000
+    producer:
+      topics:
+        topic-name: customer_service
+        partitions: 3
+        replicas: 1
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+
+grpc:
+  server:
+    port: -1
+    in-process-name: test
+  client:
+    GLOBAL:
+      address: in-process:test
+
+logstash:
+  server:
+    port: ${LOGSTASH_PORT:localhost:5000}
+
+#Application global values
+application:
+  security:
+    jwt:
+      secret-key: ${ACCOUNT_SERVICE_JWT_SECRET_KEY:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+      expiration-session: ${ACCOUNT_SERVICE_SESSION_TOKEN_EXPIRATION:600000}  # 10 минут
+      expiration-access: ${ACCOUNT_SERVICE_JWT_EXPIRATION_ACCESS:600000}      # 10 минут
+      expiration-refresh: ${ACCOUNT_SERVICE_JWT_EXPIRATION_REFRESH:1800000}   # 30 минут

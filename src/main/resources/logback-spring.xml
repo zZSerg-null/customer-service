@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <configuration>
+    <springProperty scope="context" name="logstash" source="logstash.server.port"/>
+    <property name="LOGSTASH_PORT" value="${logstash}"/>
+
+      <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+          <pattern>%(%d{ISO8601}) %highlight(%-5level) [%cyan(%t)] traceId: %yellow(%X{traceId:-}), spanId: %yellow(%X{spanId:-}) %magenta(%C{}): %msg%n%throwable</pattern>
+        </encoder>
+      </appender>
+
+      <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>log/app-logback.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+          <fileNamePattern>log/archived/app-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+          <!-- each archived file's size will be max 10MB -->
+          <maxFileSize>10MB</maxFileSize>
+          <!-- 7 days to keep -->
+          <maxHistory>7</maxHistory>
+          <!-- total size of all archive files, if total size > 1GB, it will delete old archived file -->
+          <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+          <Pattern>%d %p [%t] traceId: %X{traceId:-} spanId: %X{spanId:-} %C: %msg%n%throwable</Pattern>
+        </encoder>
+      </appender>
+
+      <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>${LOGSTASH_PORT}</destination>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+      </appender>
+
+  <root level="INFO">
+    <appender-ref ref="CONSOLE" />
+  </root>
+
+<!--  <logger name="org.apache.kafka" level="OFF"/>-->
+  <logger name="net.logstash.logback" level="OFF"/>
+
+  <logger name="ru.zinovievbank.customerservice" level="DEBUG" additivity="false">
+    <appender-ref ref="CONSOLE" />
+<!--    <appender-ref ref="FILE" />-->
+<!--    <appender-ref ref="LOGSTASH" />-->
+  </logger>
+</configuration>

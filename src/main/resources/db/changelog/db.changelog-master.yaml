@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - context: dev
+  - logicalFilePath: db/changelog/db.changelog-master.yaml
+  - include:
+      file: db/changelog/v.0.0.1/create-passport.yaml
+  - include:
+      file: db/changelog/v.0.0.1/create-address.yaml
+  - include:
+      file: db/changelog/v.0.0.1/create-customer.yaml
+  - include:
+      file: db/changelog/v.0.0.1/create-user_profile.yaml
+  - include:
+      file: db/changelog/v.0.0.1/create-user_token.yaml
+  - include:
+      file: db/changelog/v.0.0.1/add-test-data-for-customer-passport-address-user_profile-user_token.yaml
+  - include:
+      file: db/changelog/v.0.0.2/update-tables.yaml
+  - include:
+      file: db/changelog/v.0.0.2/add-new-customer-for-aqa.yaml
+  - include:
+      file: db/changelog/v.0.0.2/create-index-on-passport-series-number.yaml
