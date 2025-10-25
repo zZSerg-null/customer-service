@@ -1,5 +1,9 @@
 # Customer Service
 
+[![Java](https://img.shields.io/badge/Java-17%2B-blue?logo=java)](https://openjdk.org/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.0%2B-brightgreen?logo=springboot)](https://spring.io/projects/spring-boot)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
 Сервис **Customer Service** — микросервис, реализующий управление сущностью «Клиент (Customer)»: создание, чтение, обновление, удаление, а также публикацию событий в Apache Kafka.  
 Реализован на Java + Spring Boot, построен по стандартам для личных целей
 
